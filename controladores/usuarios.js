@@ -5,6 +5,44 @@ const jwtSecret = require('../jwt_secret');
 
 const pwd = securePassword();
 
+const cadastrarUsuario = async (req, res) =>{
+    const { nome, email, senha } = req.body;
+
+    if(!nome){
+        return res.status(400).json('O campo nome é obrigatório');
+    }
+
+    if(!email){
+        return res.status(400).json('O campo email é obrigatório');
+    }
+
+    if(!senha){
+        return res.status(400).json('O campo senha é obrigatório');
+    }
+
+    try {
+        const query = 'SELECT * FROM usuarios WHERE email = $1'
+        const emailJaCadastrado = await conexao.query(query, [email]);
+
+        if(emailJaCadastrado.rowCount > 0){
+            return res.status(400).json('Email já cadastrado');
+        }
+
+        const hash = (await pwd.hash(Buffer.from(senha))).toString("hex");
+        const query = 'INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)';
+        const usuario = await conexao.query(query, [nome, email, senha]);
+
+        if(usuario.rowCount === 0){
+            return res.status(400).json('Não foi possível cadastar o usuário');
+        }
+
+        return res.status(200).json('Usuário cadastrado com sucesso');
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+}
+
 const login = async (req, res) =>{
     const { email, senha } = req.body;
 
@@ -47,12 +85,13 @@ const login = async (req, res) =>{
         }, jwtSecret);
 
         return res.send(token);
-        
+
     } catch (error) {
         return res.status(400).json(error.message);
     }
 }
 
 module.exports = {
-    login
+    login,
+    cadastrarUsuario
 };

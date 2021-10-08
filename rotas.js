@@ -1,4 +1,4 @@
-const express = rerquire('express');
+const express = require('express');
 const usuarios = require('./controladores/usuarios');
 const clientes = require('./controladores/clientes');
 const verificacao = require('./filtros/verificaLogin');

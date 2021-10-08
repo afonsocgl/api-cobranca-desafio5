@@ -29,8 +29,8 @@ const cadastrarUsuario = async (req, res) =>{
         }
 
         const hash = (await pwd.hash(Buffer.from(senha))).toString("hex");
-        const query = 'INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)';
-        const usuario = await conexao.query(query, [nome, email, senha]);
+        const query1 = 'INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)';
+        const usuario = await conexao.query(query1, [nome, email, senha]);
 
         if(usuario.rowCount === 0){
             return res.status(400).json('Não foi possível cadastar o usuário');

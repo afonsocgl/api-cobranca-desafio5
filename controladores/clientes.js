@@ -2,7 +2,6 @@ const conexao = require('../conexao');
 
 
 const cadastrarCliente = async (req, res) =>{
-    const usuario  = req;
     const { nome, email, cpf, telefone, cep, logradouro, complemento, bairro, cidade, estado } = req.body;
 
     if(!nome){

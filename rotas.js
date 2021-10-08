@@ -11,6 +11,6 @@ rotas.post('/login', usuarios.login);
 rotas.post('/cadastro', usuarios.cadastrarUsuario);
 
 //Clientes
-rotas.post('cadastrocliente', verificacao, clientes.cadastrarCliente);
+rotas.post('/cadastrocliente', verificacao, clientes.cadastrarCliente);
 
 module.exports = rotas;

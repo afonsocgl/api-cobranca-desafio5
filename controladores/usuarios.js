@@ -30,8 +30,8 @@ const cadastrarUsuario = async (req, res) =>{
 
         const hash = (await pwd.hash(Buffer.from(senha))).toString("hex");
         const query1 = 'INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)';
-        const usuario = await conexao.query(query1, [nome, email, senha]);
-
+        const usuario = await conexao.query(query1, [nome, email, hash]);
+        
         if(usuario.rowCount === 0){
             return res.status(400).json('Não foi possível cadastar o usuário');
         }
@@ -45,23 +45,23 @@ const cadastrarUsuario = async (req, res) =>{
 
 const login = async (req, res) =>{
     const { email, senha } = req.body;
-
+    
     if (!email){
         return res.status(400).json('O campo e-mail é obrigatório!');
     }
     if(!senha){
-        return res.status(400).json('Ocampor senha é obrigatório!');
+        return res.status(400).json('O campo senha é obrigatório!');
     }
 
     try {
         const query = 'SELECT * FROM usuarios WHERE email = $1';
         const usuarios = await conexao.query(query, [email]);
-
+        
         if (usuarios.rowCount === 0){
             return res.status(400).json('Usuário não cadastrado');
         }
-
-        const usuario = usuarios.row[0];
+        
+        const usuario = usuarios.rows[0];
         const result = await pwd.verify(Buffer.from(senha), Buffer.from(usuario.senha, "hex"));
 
         switch (result) {

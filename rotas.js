@@ -9,6 +9,7 @@ const rotas = express();
 //Usuarios
 rotas.post('/login', usuarios.login);
 rotas.post('/cadastro', usuarios.cadastrarUsuario);
+rotas.put('/perfil', verificacao, usuarios.editarUsuario);
 
 //Clientes
 rotas.post('/cadastrocliente', verificacao, clientes.cadastrarCliente);

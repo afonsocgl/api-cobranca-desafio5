@@ -25,3 +25,13 @@ CREATE TABLE clientes(
     cidade varchar(50),
     estado varchar(20)
 );
+
+DROP TABLE IF EXISTS cobrancas;
+CREATE TABLE COBRANCAS(
+  id serial primary key,
+  cliente varchar(30)not null,
+  descricao varchar(300) not null,
+  status varchar(8) not null,
+  valor int not null,
+  vencimento date not null
+);

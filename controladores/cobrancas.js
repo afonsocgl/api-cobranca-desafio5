@@ -1,9 +1,9 @@
 const conexao = require('../conexao');
 
 const cadastrarCobranca = async (req, res) =>{
-    const { cliente, descricao, status, valor, vencimento } = req.body;
+    const { cliente_id, descricao, status, valor, vencimento } = req.body;
 
-    if(!cliente){
+    if(!cliente_id){
         return res.status(400).json('Necessário informar um cliente cadastrado');
     }
     
@@ -25,15 +25,15 @@ const cadastrarCobranca = async (req, res) =>{
 
     
     try {
-        const query = 'SELECT * FROM clientes WHERE nome = $1'
-        const clienteCadastrado = await conexao.query(query, [cliente]);
+        const query = 'SELECT * FROM clientes WHERE id = $1'
+        const clienteCadastrado = await conexao.query(query, [cliente_id]);
 
         if(clienteCadastrado.rowCount === 0){
             return res.status(400).json('O cliente informado deve ser cadastrado previamente');
         }
 
-        const query1 = 'INSERT INTO cobrancas (cliente, descricao, status, valor, vencimento) VALUES ($1, $2, $3, $4, $5)';
-        const cadastroCobranca = await conexao.query(query1, [cliente, descricao, status, valor, vencimento]);
+        const query1 = 'INSERT INTO cobrancas (cliente_id, descricao, status, valor, vencimento) VALUES ($1, $2, $3, $4, $5)';
+        const cadastroCobranca = await conexao.query(query1, [cliente_id, descricao, status, valor, vencimento]);
     
         if(cadastroCobranca.rowCount === 0){
             return res.status(400).json('Não foi possível cadastrar essa cobrança');

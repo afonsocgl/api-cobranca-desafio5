@@ -29,7 +29,7 @@ CREATE TABLE clientes(
 DROP TABLE IF EXISTS cobrancas;
 CREATE TABLE COBRANCAS(
   id serial primary key,
-  cliente varchar(30)not null,
+  cliente_id int references clientes (id),
   descricao varchar(300) not null,
   status varchar(8) not null,
   valor int not null,

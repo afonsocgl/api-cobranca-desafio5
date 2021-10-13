@@ -35,7 +35,26 @@ const cadastrarCliente = async (req, res) =>{
     }
 };
 
+const listarClientes = async (req, res) =>{
+    try {
+        const query = `SELECT nome, email, telefone, status, sum(valor) as divida FROM clientes
+                        JOIN cobrancas ON clientes.id = cobrancas.cliente_id
+                        GROUP BY nome, email, telefone, status`;
+
+        const listaClientes = await conexao.query(query);
+
+        if(listaClientes.rowCount === 0){
+            return res.status(400).json('Não foi possível listar os clientes');
+        }
+
+        return res.status(200).json(listaClientes.rows);
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
 
 module.exports = {
-    cadastrarCliente
+    cadastrarCliente,
+    listarClientes
 }

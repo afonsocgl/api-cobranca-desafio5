@@ -16,6 +16,7 @@ rotas.put('/perfil', verificacao, usuarios.editarUsuario);
 rotas.post('/cadastrocliente', verificacao, clientes.cadastrarCliente);
 rotas.get('/clientes', verificacao, clientes.listarClientes);
 rotas.get('/clientes/:id', verificacao, clientes.detalheCliente);
+rotas.put('/clientes/:id', verificacao, clientes.editarCliente);
 
 //Cobranças
 rotas.post('/cobrancas', verificacao, cobrancas.cadastrarCobranca);

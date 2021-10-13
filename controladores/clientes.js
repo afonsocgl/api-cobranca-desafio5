@@ -53,8 +53,31 @@ const listarClientes = async (req, res) =>{
     }
 };
 
+const detalheCliente = async (req, res) =>{
+    const { id } = req.params;
+
+    try {
+        const query = 'SELECT * FROM clientes WHERE id = $1';
+        const cliente = await conexao.query(query, [id]);
+
+        if (cliente.rowCount === 0){
+            return res.status(400).json('Cliente indisponível');
+        }
+
+        const query1 = 'SELECT * FROM cobrancas WHERE cliente_id = $1';
+        const cobrancas = await conexao.query(query1, [id]);
+
+        const detalheCliente = [cliente.rows, cobrancas.rows];
+
+        return res.status(200).json(detalheCliente);
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
 
 module.exports = {
     cadastrarCliente,
-    listarClientes
+    listarClientes,
+    detalheCliente
 }

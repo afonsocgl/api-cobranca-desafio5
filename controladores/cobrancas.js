@@ -45,7 +45,23 @@ const cadastrarCobranca = async (req, res) =>{
     }
 };
 
+const listarCobrancas = async (req, res) =>{
+        try {
+        const query = 'SELECT * FROM cobrancas';
+        const listaDeCobrancas = await conexao.query(query);
+
+        if(listaDeCobrancas.rowCount === 0){
+            return res.status(400).json('Não foi possível carregar a lista de cobranças');
+        }
+
+        return res.status(200).json(listaDeCobrancas.rows);
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+}
+
 module.exports = {
-    cadastrarCobranca
+    cadastrarCobranca,
+    listarCobrancas
 }
 

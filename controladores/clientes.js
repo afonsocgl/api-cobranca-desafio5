@@ -39,14 +39,19 @@ const listarClientes = async (req, res) =>{
     try {
         const query = `SELECT 
                             cl.id, nome, email, telefone,
-                            sum(case when s.id = 1 then valor end) as pendente,
-                            sum(case when s.id = 2 then valor end) as pago 
+                            sum(valor) as cobrancas_feitas,
+                            sum(case when s.id = 2 then valor end) as recebidas,
+                            sum(case when cb.vencimento < now() and cb.status_id = 1 then valor end) as inadimplente
                         FROM 
                             clientes AS cl
-                        LEFT JOIN cobrancas AS cb ON cl.id = cb.cliente_id
-                        LEFT JOIN status AS s ON cb.status_id = s.id
-                        GROUP BY cl.id
-                        ORDER BY cl.nome;`;
+                        LEFT JOIN
+                            cobrancas AS cb ON cl.id = cb.cliente_id
+                        LEFT JOIN
+                            status AS s ON cb.status_id = s.id
+                        GROUP BY 
+                            cl.id
+                        ORDER BY 
+                            cl.nome;`;
 
         const listaClientes = await conexao.query(query);
 

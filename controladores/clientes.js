@@ -37,9 +37,16 @@ const cadastrarCliente = async (req, res) =>{
 
 const listarClientes = async (req, res) =>{
     try {
-        const query = `SELECT nome, email, telefone, status, sum(valor) as divida FROM clientes
-                        JOIN cobrancas ON clientes.id = cobrancas.cliente_id
-                        GROUP BY nome, email, telefone, status`;
+        const query = `SELECT 
+                            cl.id, nome, email, telefone,
+                            sum(case when s.id = 1 then valor end) as pendente,
+                            sum(case when s.id = 2 then valor end) as pago 
+                        FROM 
+                            clientes AS cl
+                        LEFT JOIN cobrancas AS cb ON cl.id = cb.cliente_id
+                        LEFT JOIN status AS s ON cb.status_id = s.id
+                        GROUP BY cl.id
+                        ORDER BY cl.nome;`;
 
         const listaClientes = await conexao.query(query);
 

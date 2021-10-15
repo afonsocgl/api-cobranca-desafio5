@@ -32,7 +32,7 @@ const cadastrarCobranca = async (req, res) =>{
             return res.status(400).json('O cliente informado deve ser cadastrado previamente');
         }
 
-        const query1 = 'INSERT INTO cobrancas (cliente_id, descricao, status, valor, vencimento) VALUES ($1, $2, $3, $4, $5)';
+        const query1 = 'INSERT INTO cobrancas (cliente_id, descricao, status_id, valor, vencimento) VALUES ($1, $2, $3, $4, $5)';
         const cadastroCobranca = await conexao.query(query1, [cliente_id, descricao, status_id, valor, vencimento]);
     
         if(cadastroCobranca.rowCount === 0){

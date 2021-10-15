@@ -114,9 +114,8 @@ const editarCliente = async (req, res) =>{
     try {    
         const query = 'SELECT * FROM clientes WHERE id = $1';
         const cliente =  await conexao.query(query, [id]);
-        console.log(cliente);
-        if(!cliente){
-            console.log(teste);
+        
+        if(cliente.rowCount === 0){
             return res.status(400).json('Cliente não cadastrado');
         }
         

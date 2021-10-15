@@ -47,7 +47,20 @@ const cadastrarCobranca = async (req, res) =>{
 
 const listarCobrancas = async (req, res) =>{
         try {
-        const query = 'SELECT * FROM cobrancas';
+        const query = `SELECT 
+                            cb.id, cl.nome, cb.descricao, cb.valor, cb.vencimento, s.descricao,
+                            case 
+                                when cb.vencimento < now() and cb.status_id = 1 then true end as vencido
+                        FROM
+                            cobrancas AS cb
+                        JOIN
+                            clientes AS cl ON cl.id = cb.cliente_id
+                        JOIN
+                            status AS s ON cb.status_id = s.id
+                        GROUP BY
+                            cb.id, cl.nome, s.descricao
+                        ORDER BY
+                            cb.id;`;
         const listaDeCobrancas = await conexao.query(query);
 
         if(listaDeCobrancas.rowCount === 0){

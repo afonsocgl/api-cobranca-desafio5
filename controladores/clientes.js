@@ -18,12 +18,19 @@ const cadastrarCliente = async (req, res) =>{
     }
 
     try {
-        const query = `
+        const query = 'SELECT * FROM clientes WHERE cpf = $1;';
+        const cpfCadastrado = await conexao.query(query, [cpf]);
+
+        if(cpfCadastrado.rowCount > 0){
+            return res.status(400).json('CPF já cadastrado');
+        }
+        
+        const query1 = `
         INSERT INTO clientes
         (nome, email, cpf, telefone, cep, logradouro, complemento, bairro, cidade, estado)
         VALUES
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
-        const cadastrarCliente = await conexao.query(query, [nome, email, cpf, telefone, cep, logradouro, complemento, bairro, cidade, estado]);
+        const cadastrarCliente = await conexao.query(query1, [nome, email, cpf, telefone, cep, logradouro, complemento, bairro, cidade, estado]);
 
         if(cadastrarCliente.rowCount === 0){
             return res.status(400).json('Não foi possível cadastrar o cliente');

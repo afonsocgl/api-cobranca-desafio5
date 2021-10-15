@@ -18,20 +18,3 @@ const query = (text, param) =>{
 module.exports ={
     query
 };
-
-
-// const pool = new Pool({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'api_cobranca',
-//     password: 'Af920204',
-//     port: 5432
-// });
-
-// const query = (text, param) =>{
-//     return pool.query(text, param);
-// };
-
-// module.exports ={
-//     query
-// };

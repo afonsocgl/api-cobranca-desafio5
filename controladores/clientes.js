@@ -24,7 +24,7 @@ const cadastrarCliente = async (req, res) =>{
         if(cpfCadastrado.rowCount > 0){
             return res.status(400).json('CPF já cadastrado');
         }
-        
+
         const query1 = `
         INSERT INTO clientes
         (nome, email, cpf, telefone, cep, logradouro, complemento, bairro, cidade, estado)
@@ -114,6 +114,10 @@ const editarCliente = async (req, res) =>{
     try {    
         const query = 'SELECT * FROM clientes WHERE id = $1';
         const cliente =  await conexao.query(query, [id]);
+
+        if(!cliente){
+            return res.status(400).json('Cliente não cadastrado');
+        }
         
         if(cliente.rows[0].email != email){
             const query = 'SELECT * FROM clientes WHERE email = $1';

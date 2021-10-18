@@ -73,8 +73,53 @@ const listarCobrancas = async (req, res) =>{
     }
 }
 
+const editarCobranca = async (req, res) =>{
+    const { id } = req.params;
+    const { cliente_id, descricao, status_id, valor, vencimento } = req.body;
+
+    if(!cliente_id){
+        return res.status(400).json('É necessário informar um cliente');
+    }
+    if(!descricao){
+        return res.status(400).json('É necessário informar uma descrição para a cobrança');
+    }
+    if(!status_id){
+        return res.status(400).json('É necessário informar um status válido');
+    }
+    if(!valor){
+        return res.status(400).json('É necessário informar um valor para essa cobrança');
+    }
+    if(!vencimento){
+        return res.status(400).json('É necessário informar uma data de vencimento para essa cobrança');
+    }
+    
+    try {    
+        const query = 'SELECT * FROM clientes WHERE id = $1';
+        const cliente =  await conexao.query(query, [cliente_id]);
+        
+        if(cliente.rowCount === 0){
+            return res.status(400).json('É necessário infromar um cliente cadastrado');
+        }
+       
+        const query1 = `
+        UPDATE cobrancas
+        SET cliente_id = $1, descricao = $2, status_id = $3, valor = $4, venciemnto = $5
+        WHERE id = $6`;
+
+        const cobrancaEditada = await conexao.query(query1, [cliente_id, descricao, status_id, valor, vencimento, id])
+
+        if(cobrancaEditada.rowCount === 0){
+            return res.status(400).json('Não foi possível editar a cobranca');
+        }
+        return res.status(200).json('Cobranca atualizada com sucesso');
+    } catch (error) {
+        return res.status(400).json(error.message);
+    };
+};
+
 module.exports = {
     cadastrarCobranca,
-    listarCobrancas
+    listarCobrancas,
+    editarCobranca
 }
 

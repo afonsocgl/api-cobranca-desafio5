@@ -21,5 +21,6 @@ rotas.put('/clientes/:id', verificacao, clientes.editarCliente);
 //Cobranças
 rotas.post('/cobrancas', verificacao, cobrancas.cadastrarCobranca);
 rotas.get('/cobrancas', verificacao, cobrancas.listarCobrancas);
+rotas.put('/cobrancas/:id', verificacao, cobrancas.editarCobranca);
 
 module.exports = rotas;

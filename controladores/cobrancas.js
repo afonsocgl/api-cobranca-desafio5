@@ -136,7 +136,7 @@ const excluirCobranca = async (req, res) =>{
             return res.status(400).json('Não é possível excluir uma cobrança em atraso');
         }
 
-        const query1 = 'DELETE * FROM cobrancas WHERE id=$1';
+        const query1 = 'DELETE FROM cobrancas WHERE id=$1';
         const cobrancaExcluida = await conexao.query(query1, [id]);
 
         if(cobrancaExcluida.rowCount === 0){

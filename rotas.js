@@ -23,6 +23,6 @@ rotas.post('/cobrancas', verificacao, cobrancas.cadastrarCobranca);
 rotas.get('/cobrancas', verificacao, cobrancas.listarCobrancas);
 rotas.put('/cobrancas/:id', verificacao, cobrancas.editarCobranca);
 rotas.delete('/cobrancas/:id', verificacao, cobrancas.excluirCobranca);
-rotas.get('/cobrancas/contadorStatus', verificacao, cobrancas.status);
+rotas.get('/cobrancas/contadorstatus', verificacao, cobrancas.contadorStatus);
 
 module.exports = rotas;

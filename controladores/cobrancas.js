@@ -149,10 +149,35 @@ const excluirCobranca = async (req, res) =>{
     }
 };
 
+const contadorStatus = async (req, res) =>{
+    
+    try {
+        const queryPrevistas = 'SELECT count(status_id) FROM cobrancas WHERE status_id = 1 and vencimento > now();'
+        const previstas = await conexao.query(queryPrevistas);
+    
+        const queryVencidas = 'SELECT count(status_id) FROM cobrancas WHERE status_id = 1 and vencimento < now();'
+        const vencidas = await conexao.query(queryVencidas);
+    
+        const queryPagas = 'SELECT count(status_id) FROM cobrancas WHERE status_id = 2;';
+        const pagas = await conexao.query(queryPagas);
+
+        const cobrancaStatus = {
+            "Previstas": previstas,
+            "Vencidas": vencidas,
+            "Pagas": pagas
+        };
+
+        return res.status(200).json(cobrancaStatus);        
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
 module.exports = {
     cadastrarCobranca,
     listarCobrancas,
     editarCobranca,
-    excluirCobranca
+    excluirCobranca,
+    contadorStatus
 }
 

@@ -73,7 +73,7 @@ const listarCobrancas = async (req, res) =>{
     }
 }
 
-const editarCobranca = async (req, res) =>{
+const editarCobranca = async (req, res) =>{""
     const { id } = req.params;
     const { cliente_id, descricao, status_id, valor, vencimento } = req.body;
 
@@ -103,7 +103,7 @@ const editarCobranca = async (req, res) =>{
        
         const query1 = `
         UPDATE cobrancas
-        SET cliente_id = $1, descricao = $2, status_id = $3, valor = $4, venciemnto = $5
+        SET cliente_id = $1, descricao = $2, status_id = $3, valor = $4, vencimento = $5
         WHERE id = $6`;
 
         const cobrancaEditada = await conexao.query(query1, [cliente_id, descricao, status_id, valor, vencimento, id])

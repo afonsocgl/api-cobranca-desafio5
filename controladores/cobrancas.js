@@ -73,7 +73,7 @@ const listarCobrancas = async (req, res) =>{
     }
 }
 
-const editarCobranca = async (req, res) =>{""
+const editarCobranca = async (req, res) =>{
     const { id } = req.params;
     const { cliente_id, descricao, status_id, valor, vencimento } = req.body;
 
@@ -117,9 +117,42 @@ const editarCobranca = async (req, res) =>{""
     };
 };
 
+const excluirCobranca = async (req, res) =>{
+    const { id } = req.params;
+
+    try {
+        const query = 'SELECT * FROM cobrancas WHERE id = $1';
+        const cobranca = await conexao.query(query, [id]);
+
+        if(cobranca.rowCount === 0){
+            return res.status(400).json('Cobranca não cadastrada');
+        }
+
+        if(cobranca.rows[0].status_id != '1'){
+            return res.status(400).json('Não é possível excluir uma cobrança que não está com o status pendente');
+        }
+
+        if(cobranca.rows[0].vencimento < now()){
+            return res.status(400).json('Não é possível excluir uma cobrança em atraso');
+        }
+
+        const query1 = 'DELETE * FROM cobrancas WHERE id=$1';
+        const cobrancaExcluida = await conexao.query(query1, [id]);
+
+        if(cobrancaExcluida.rowCount === 0){
+            return res.status(400).json('Não foi possível excluir essa cobrança')
+        }
+
+        return res.status(200).json('Cobrança excluida com sucesso!');
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
 module.exports = {
     cadastrarCobranca,
     listarCobrancas,
-    editarCobranca
+    editarCobranca,
+    excluirCobranca
 }
 

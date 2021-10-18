@@ -132,7 +132,7 @@ const excluirCobranca = async (req, res) =>{
             return res.status(400).json('Não é possível excluir uma cobrança que não está com o status pendente');
         }
 
-        if(cobranca.rows[0].vencimento < now()){
+        if(cobranca.rows[0].vencimento < new Date()){
             return res.status(400).json('Não é possível excluir uma cobrança em atraso');
         }
 

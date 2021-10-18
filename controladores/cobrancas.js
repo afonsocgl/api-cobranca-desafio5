@@ -162,9 +162,9 @@ const contadorStatus = async (req, res) =>{
         const pagas = await conexao.query(queryPagas);
 
         const cobrancaStatus = {
-            "Previstas": previstas.rows[0],
-            "Vencidas": vencidas.rows[0],
-            "Pagas": pagas.rows[0]
+            "Previstas": previstas.rows[0].count,
+            "Vencidas": vencidas.rows[0].count,
+            "Pagas": pagas.rows[0].count
         };
 
         return res.status(200).json(cobrancaStatus);        
